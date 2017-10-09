@@ -27,12 +27,10 @@ class LogUpLoader implements Runnable{
             //2.获得数据库链接
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
             //3.通过数据库的连接操作数据库，实现增删改查（使用PreparedStatement类）
-            String sql = "INSERT INTO A_LOGS(ip) " +
-                    "VALUES(?)";
+            String sql = "INSERT INTO A_LOGS(ip,date,method,url_front,url_parameters,version,result_number,spend) " +
+                    "VALUES(?,?,?,?,?,?,?,?)";
 
             pst = conn.prepareStatement(sql);
-            //TODO 上传到数据库
-
 
             for (; ; ) {
                 count++;
@@ -41,6 +39,13 @@ class LogUpLoader implements Runnable{
                     String ip = matchedRequest.getIp();
                     System.out.println(ip);
                     pst.setString(1, ip);
+                    pst.setString(2,matchedRequest.getDate());
+                    pst.setString(3,matchedRequest.getMethod());
+                    pst.setString(4,matchedRequest.getUrlFront());
+                    pst.setString(5,matchedRequest.getUrlParameters());
+                    pst.setString(6,matchedRequest.getVersion());
+                    pst.setString(7,String.valueOf(matchedRequest.getResultNumber()));
+                    pst.setString(8,String.valueOf(matchedRequest.getSpend()));
                     pst.execute();
                 }else {
                     break;

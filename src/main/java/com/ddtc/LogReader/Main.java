@@ -15,9 +15,11 @@ public class Main {
 
 
 
-    public static void main(String[] args) throws IOException {
-        threadPool.execute(new LogUpLoader());
-        String logFilePath = "./logs/logback-access.2017-09-20.log";
+    public static void main(String[] args) throws IOException, InterruptedException {
+        //启动上传线程
+        new Thread(new LogUpLoader()).start();
+
+        String logFilePath = "./logs/logback-access.2017-09-21.log";
         //先将源文件读取到内存中
         File srcFile = new File(logFilePath);//创建一个文件对象
         BufferedReader bufferedReader = new BufferedReader(new FileReader(srcFile));
@@ -49,6 +51,7 @@ public class Main {
 
             //System.out.println("**************");
             threadPool.execute(new SplitTask(spilts));
+
 
         }
 

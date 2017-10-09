@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public class SplitTask implements Runnable{
 
-    private static String pattern = "((\\d+\\.){3}\\d+) (\\d+/\\W+/(\\d+:){3}\\d+ \\+\\d+) (\\D+) (\\S*) HTTP/1\\.0 (\\d{3}) - spend:(\\d+) ";
+    private static String pattern = "((\\d+\\.){3}\\d+) (\\d+/\\W+/(\\d+:){3}\\d+ \\+\\d+) (\\D+) (\\S*)\\?(\\S*) (\\S*) (\\d{3}) - spend:(\\d+) ";
     //private static String pattern = ".*";
     private static Pattern r = Pattern.compile(pattern);
 
@@ -41,6 +41,13 @@ public class SplitTask implements Runnable{
                         MatchedRequest matchedRequest = new MatchedRequest();
                         //System.out.println("g(0):"+m.group(0));
                         matchedRequest.setIp(m.group(1));
+                        matchedRequest.setDate(m.group(3));
+                        matchedRequest.setMethod(m.group(5));
+                        matchedRequest.setUrlFront(m.group(6));
+                        matchedRequest.setUrlParameters(m.group(7));
+                        matchedRequest.setVersion(m.group(8));
+                        matchedRequest.setResultNumber(Integer.valueOf(m.group(9)));
+                        matchedRequest.setSpend(Integer.valueOf(m.group(10)));
                         Main.blockingquque.add(matchedRequest);
                         matchedRequest = null;
                     }
